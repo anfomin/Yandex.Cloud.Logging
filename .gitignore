@@ -1,0 +1,16 @@
+# Build
+bin
+obj
+/artifacts
+
+# User-specific files
+*.suo
+*.user
+*.ide
+*.log
+*.publishsettings
+
+# System files
+.DS_Store
+._*
+Thumbs.db
