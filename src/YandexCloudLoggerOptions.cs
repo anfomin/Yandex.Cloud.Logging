@@ -21,27 +21,21 @@ public record YandexCloudLoggerOptions
 
 	/// <summary>
 	/// Required logging group identifier.
-	/// Value must match the regular expression ([a-zA-Z][-a-zA-Z0-9_.]{0,63})?.
+	/// Value must match the regular expression [a-zA-Z][-a-zA-Z0-9_.]{0,63}.
 	/// </summary>
 	public string? GroupId { get; set; }
 
 	/// <summary>
 	/// Optional resource type, i.e., serverless.function.
-	/// Value must match the regular expression ([a-zA-Z][-a-zA-Z0-9_.]{0,63})?.
+	/// Value must match the regular expression [a-zA-Z][-a-zA-Z0-9_.]{0,63}.
 	/// </summary>
 	public string? ResourceType { get; set; }
 
 	/// <summary>
 	/// Optional resource identifier, i.e., ID of the function producing logs.
-	/// Value must match the regular expression ([a-zA-Z0-9][-a-zA-Z0-9_.]{0,63})?.
+	/// Value must match the regular expression [a-zA-Z0-9][-a-zA-Z0-9_.]{0,63}.
 	/// </summary>
 	public string? ResourceId { get; set; }
-
-	/// <summary>
-	/// Optional logging stream name.
-	/// Value must match the regular expression |[a-zA-Z][-a-zA-Z0-9_.]{0,63}.
-	/// </summary>
-	public string? StreamName { get; set; }
 
 	/// <summary>
 	/// Log entries will be sent in batches of this size.

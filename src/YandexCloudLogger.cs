@@ -1,8 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
-using Yandex.Cloud.Logging.V1;
-using static Yandex.Cloud.Logging.V1.LogLevel.Types;
-using LoggerLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Yandex.Cloud.Logging;
 
@@ -19,23 +16,28 @@ public sealed class YandexCloudLogger(string categoryName, YandexCloudLoggerServ
 		=> null;
 
 	/// <inheritdoc />
-	public bool IsEnabled(LoggerLevel logLevel)
-		=> logLevel != LoggerLevel.None;
+	public bool IsEnabled(LogLevel logLevel)
+		=> logLevel != LogLevel.None;
 
 	/// <inheritdoc />
-	public void Log<TState>(LoggerLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+	public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
 	{
 		if (!IsEnabled(logLevel))
 			return;
 
-		var payload = new Struct();
-		payload.Fields["category"] = Value.ForString(_categoryName);
+		V1.IncomingLogEntry entry = new()
+		{
+			Timestamp = DateTime.UtcNow.ToTimestamp(),
+			Level = logLevel.ToYandex(),
+			StreamName = _categoryName,
+			Message = formatter(state, exception)
+		};
 		if (exception != null)
 		{
 			List<Value> exceptionValues = [];
 			while (exception != null)
 			{
-				var exceptionPayload = new Struct();
+				Struct exceptionPayload = new();
 				exceptionPayload.Fields["type"] = Value.ForString(exception.GetType().FullName);
 				exceptionPayload.Fields["message"] = Value.ForString(exception.Message);
 				if (exception.StackTrace is {} stackTrace)
@@ -47,27 +49,11 @@ public sealed class YandexCloudLogger(string categoryName, YandexCloudLoggerServ
 				exceptionValues.Add(Value.ForStruct(exceptionPayload));
 				exception = exception.InnerException;
 			}
-			payload.Fields["exceptions"] = Value.ForList(exceptionValues.ToArray());
-		}
 
-		IncomingLogEntry entry = new()
-		{
-			Timestamp = DateTime.UtcNow.ToTimestamp(),
-			Level = GetYandexLogLevel(logLevel),
-			Message = formatter(state, exception),
-			JsonPayload = payload
-		};
+			Struct payload = new();
+			payload.Fields["exceptions"] = Value.ForList(exceptionValues.ToArray());
+			entry.JsonPayload = payload;
+		}
 		_service.EnqueueLog(entry);
 	}
-
-	static Level GetYandexLogLevel(LoggerLevel logLevel) => logLevel switch
-	{
-		LoggerLevel.Trace => Level.Trace,
-		LoggerLevel.Debug => Level.Debug,
-		LoggerLevel.Information => Level.Info,
-		LoggerLevel.Warning => Level.Warn,
-		LoggerLevel.Error => Level.Error,
-		LoggerLevel.Critical => Level.Fatal,
-		_ => Level.Unspecified
-	};
 }

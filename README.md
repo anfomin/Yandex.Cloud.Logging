@@ -27,8 +27,7 @@ And add configuration to the `appsettings.json`:
             "FolderId": "<required folder identifier from Yandex.Cloud console>",
             "GroupId": "<required group identifier from Yandex.Cloud console>",
             "ResourceType": "<optional resource type>",
-            "ResourceId": "<optional resource identifier>",
-            "StreamName": "<options log stream name>"
+            "ResourceId": "<optional resource identifier>"
         }
     }
 }
@@ -45,7 +44,6 @@ builder.Logging.AddYandexCloud(opt =>
     opt.ResourceType = "<optional resource type>";
     opt.GroupId = "<required group identifier from Yandex.Cloud console>";
     opt.ResourceId = "<optional resource identifier>";
-    opt.StreamName = "<options log stream name>";
 });
 ```
 

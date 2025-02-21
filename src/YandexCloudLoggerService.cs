@@ -84,8 +84,6 @@ public class YandexCloudLoggerService : BackgroundService
 			{
 				if (!_queue.TryDequeue(out var entry))
 					break;
-				if (_options.StreamName != null && string.IsNullOrEmpty(entry.StreamName))
-					entry.StreamName = _options.StreamName;
 				entries.Add(entry);
 			}
 
