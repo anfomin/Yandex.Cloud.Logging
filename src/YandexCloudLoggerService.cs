@@ -37,7 +37,7 @@ public class YandexCloudLoggerService : BackgroundService
 	}
 
 	Sdk GetSdk()
-		=> _options.CredentialsProvider is {} cred
+		=> _options.Credentials is {} cred
 		? new Sdk(cred)
 		: _sdkDefault
 		?? throw new InvalidOperationException("Yandex.Cloud credentials provider must be set or SDK service registered.");

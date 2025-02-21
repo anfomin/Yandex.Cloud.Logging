@@ -8,10 +8,10 @@ namespace Yandex.Cloud.Logging;
 public record YandexCloudLoggerOptions
 {
 	/// <summary>
-	/// Credentials used to authorize by Yandex.Cloud.
+	/// Credentials used to authorize by <see cref="Sdk"/>.
 	/// If null then <see cref="Sdk"/> service will be used.
 	/// </summary>
-	public ICredentialsProvider? CredentialsProvider { get; set; }
+	public ICredentialsProvider? Credentials { get; set; }
 
 	/// <summary>
 	/// Required logging folder identifier.
