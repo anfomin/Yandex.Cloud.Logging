@@ -8,7 +8,7 @@ using Yandex.Cloud.Logging.V1;
 namespace Yandex.Cloud.Logging;
 
 /// <summary>
-/// Sends log entries to Yandex.Cloud in background.
+/// Sends log entries to the Yandex.Cloud in background.
 /// </summary>
 public class YandexCloudLoggerService : BackgroundService
 {
@@ -22,6 +22,11 @@ public class YandexCloudLoggerService : BackgroundService
 	readonly ConcurrentQueue<IncomingLogEntry> _queue = new();
 	readonly SemaphoreSlim _queueSignal = new(0, 1);
 
+	/// <summary>
+	/// Initializes a new instance of <see cref="YandexCloudLoggerService"/> used to send log entries to the Yandex.Cloud in background.
+	/// </summary>
+	/// <param name="options">Yandex.Cloud logger options.</param>
+	/// <param name="sdk">Yandex.Cloud SDK. It <c>null</c> then new will be initialized with credentials from <paramref name="options"/>.</param>
 	public YandexCloudLoggerService(IOptionsMonitor<YandexCloudLoggerOptions> options, Sdk? sdk = null)
 	{
 		_options = options.CurrentValue;

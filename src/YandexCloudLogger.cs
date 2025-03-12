@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace Yandex.Cloud.Logging;
 
 /// <summary>
-/// Creates log entries for a category and sends them to Yandex.Cloud via <paramref name="service"/>.
+/// Creates log entries for a category and sends them to the Yandex.Cloud via <paramref name="service"/>.
 /// </summary>
 public sealed class YandexCloudLogger(string categoryName, YandexCloudLoggerService service) : ILogger
 {

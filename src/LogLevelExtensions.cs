@@ -6,7 +6,7 @@ namespace Yandex.Cloud.Logging;
 public static class LogLevelExtensions
 {
 	/// <summary>
-	/// Converts <see cref="LogLevel"/> to <see cref="Yandex.Cloud.Logging.V1.LogLevel"/>.
+	/// Converts <see cref="LogLevel"/> to <see cref="V1.LogLevel"/>.
 	/// </summary>
 	public static Level ToYandex(this LogLevel logLevel) => logLevel switch
 	{

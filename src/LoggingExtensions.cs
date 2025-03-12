@@ -6,7 +6,7 @@ using Yandex.Cloud.Logging;
 namespace Microsoft.Extensions.Logging;
 
 /// <summary>
-/// <see cref="ILoggingBuilder"/> extension methods for Yandex.Cloud logging registration.
+/// <see cref="ILoggingBuilder"/> extension methods for the Yandex.Cloud logging registration.
 /// </summary>
 public static class YandexCloudLoggingExtensions
 {
