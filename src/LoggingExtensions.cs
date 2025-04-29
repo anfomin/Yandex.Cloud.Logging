@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.Logging;
 public static class YandexCloudLoggingExtensions
 {
 	/// <summary>
-	/// Adds a Yandex.Cloud logger to the factory and registeres required services.
+	/// Adds a Yandex.Cloud logger to the factory and registers required services.
 	/// </summary>
 	public static ILoggingBuilder AddYandexCloud(this ILoggingBuilder builder)
 	{
@@ -24,7 +24,7 @@ public static class YandexCloudLoggingExtensions
 	}
 
 	/// <summary>
-	/// Adds a Yandex.Cloud logger to the factory and registeres required services.
+	/// Adds a Yandex.Cloud logger to the factory and registers required services.
 	/// </summary>
 	/// <param name="configure">A delegate to configure the <see cref="YandexCloudLoggerOptions"/>.</param>
 	public static ILoggingBuilder AddYandexCloud(this ILoggingBuilder builder, Action<YandexCloudLoggerOptions> configure)

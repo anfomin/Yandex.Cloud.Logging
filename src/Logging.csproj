@@ -8,13 +8,16 @@
 		<Description>Yandex.Cloud Logging provider implementation for Microsoft.Extensions.Logging.</Description>
 		<Authors>Alexander Fomin</Authors>
 		<RepositoryUrl>https://github.com/anfomin/yandex.cloud.logging</RepositoryUrl>
-		<VersionPrefix>1.1.1</VersionPrefix>
+		<VersionPrefix>1.1.2</VersionPrefix>
 		<VersionSuffix Condition="'$(VERSION_SUFFIX)'!=''">$(VERSION_SUFFIX)</VersionSuffix>
 		<RootNamespace>Yandex.Cloud.Logging</RootNamespace>
 		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<DebugType>embedded</DebugType>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);CS1573;CS1591</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

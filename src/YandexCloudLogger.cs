@@ -37,21 +37,28 @@ public sealed class YandexCloudLogger(string categoryName, YandexCloudLoggerServ
 			List<Value> exceptionValues = [];
 			while (exception != null)
 			{
-				Struct exceptionPayload = new();
-				exceptionPayload.Fields["type"] = Value.ForString(exception.GetType().FullName);
-				exceptionPayload.Fields["message"] = Value.ForString(exception.Message);
+				Struct exceptionPayload = new()
+				{
+					Fields =
+					{
+						["type"] = Value.ForString(exception.GetType().FullName),
+						["message"] = Value.ForString(exception.Message)
+					}
+				};
 				if (exception.StackTrace is {} stackTrace)
 					exceptionPayload.Fields["stack_trace"] = Value.ForList(stackTrace
 						.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-						.Select(line => Value.ForString(line))
+						.Select(Value.ForString)
 						.ToArray()
 					);
 				exceptionValues.Add(Value.ForStruct(exceptionPayload));
 				exception = exception.InnerException;
 			}
 
-			Struct payload = new();
-			payload.Fields["exceptions"] = Value.ForList(exceptionValues.ToArray());
+			Struct payload = new()
+			{
+				Fields = { ["exceptions"] = Value.ForList(exceptionValues.ToArray()) }
+			};
 			entry.JsonPayload = payload;
 		}
 		_service.EnqueueLog(entry);
