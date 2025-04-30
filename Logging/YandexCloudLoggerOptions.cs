@@ -54,8 +54,8 @@ public record YandexCloudLoggerOptions
 	public void Validate()
 	{
 		if (string.IsNullOrEmpty(FolderId))
-			throw new InvalidOperationException("Log folder ID is not set");
+			throw new InvalidOperationException("Log FolderId is not set");
 		if (string.IsNullOrEmpty(GroupId))
-			throw new InvalidOperationException("Log group ID is not set");
+			throw new InvalidOperationException("Log GroupId is not set");
 	}
 }

@@ -26,7 +26,7 @@ public class YandexCloudLoggerService : BackgroundService
 	/// Initializes a new instance of <see cref="YandexCloudLoggerService"/> used to send log entries to the Yandex.Cloud in background.
 	/// </summary>
 	/// <param name="options">Yandex.Cloud logger options.</param>
-	/// <param name="sdk">Yandex.Cloud SDK. It <c>null</c> then new will be initialized with credentials from <paramref name="options"/>.</param>
+	/// <param name="sdk">Yandex.Cloud SDK. If <c>null</c> then new will be initialized with credentials from <paramref name="options"/>.</param>
 	public YandexCloudLoggerService(IOptionsMonitor<YandexCloudLoggerOptions> options, Sdk? sdk = null)
 	{
 		_options = options.CurrentValue;
@@ -121,8 +121,8 @@ public class YandexCloudLoggerService : BackgroundService
 					},
 					Resource = new()
 					{
-						Id = _options.ResourceId ?? "",
-						Type = _options.ResourceType ?? ""
+						Type = _options.ResourceType ?? "",
+						Id = _options.ResourceId ?? ""
 					},
 				};
 				request.Entries.Add(entries);

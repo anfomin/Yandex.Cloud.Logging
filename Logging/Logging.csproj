@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="../Logging.props" />
+	<PropertyGroup>
+		<AssemblyName>Yandex.Cloud.Logging</AssemblyName>
+		<PackageId>Yandex.Cloud.Logging</PackageId>
+		<PackageTags>yandex;cloud;logging</PackageTags>
+		<Description>Yandex.Cloud Logging provider implementation for Microsoft.Extensions.Logging.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Yandex.Cloud.SDK" Version="1.4.*" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.*" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.*" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.*" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.*" />
+	</ItemGroup>
+</Project>

@@ -33,4 +33,15 @@ public static class YandexCloudLoggingExtensions
 		builder.Services.Configure(configure);
 		return builder;
 	}
+
+	/// <summary>
+	/// Registers custom <see cref="IYandexCloudLogEntryProvider"/> to provide additional payload to the Yandex.Cloud logger.
+	/// </summary>
+	/// <typeparam name="TProvider">Custom provider type.</typeparam>
+	public static ILoggingBuilder AddYandexCloudLogEntryProvider<TProvider>(this ILoggingBuilder builder)
+		where TProvider : class, IYandexCloudLogEntryProvider
+	{
+		builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IYandexCloudLogEntryProvider, TProvider>());
+		return builder;
+	}
 }

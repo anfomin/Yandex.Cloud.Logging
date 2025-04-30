@@ -1,8 +1,0 @@
-<Solution>
-  <Folder Name="/Root/">
-    <File Path="LICENSE" />
-    <File Path="publish.sh" />
-    <File Path="README.md" />
-  </Folder>
-  <Project Path="src/Logging.csproj" />
-</Solution>

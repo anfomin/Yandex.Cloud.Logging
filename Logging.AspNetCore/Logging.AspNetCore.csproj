@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="../Logging.props" />
+	<PropertyGroup>
+		<AssemblyName>Yandex.Cloud.Logging.AspNetCore</AssemblyName>
+		<PackageId>Yandex.Cloud.Logging.AspNetCore</PackageId>
+		<PackageTags>yandex;cloud;logging;asp.net</PackageTags>
+		<Description>Provides HTTP information for Yandex.Cloud Logging provider.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="../Logging/Logging.csproj" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+</Project>
