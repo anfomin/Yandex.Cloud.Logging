@@ -1,3 +1,4 @@
+using System.Reflection;
 using Yandex.Cloud.Credentials;
 
 namespace Yandex.Cloud.Logging;
@@ -47,6 +48,19 @@ public record YandexCloudLoggerOptions
 	/// then the service will wait for this time before sending the log entries.
 	/// </summary>
 	public TimeSpan CacheTime { get; set; } = TimeSpan.FromSeconds(10);
+
+	/// <summary>
+	/// Gets or sets if <see cref="OperationCanceledException"/> is ignored.
+	/// Default is <c>true</c>.
+	/// </summary>
+	public bool IgnoreCanceledExceptions { get; set; } = true;
+
+	/// <summary>
+	/// Gets set of outer exceptions that will be stripped, leaving only the valuable inner exception.
+	/// This can be used when a wrapper exception, e.g. <see cref="TargetInvocationException"/>, contains the actual
+	/// exception as the InnerException.
+	/// </summary>
+	public HashSet<Type> WrapperExceptions { get; set; } = [typeof(TargetInvocationException)];
 
 	/// <summary>
 	/// Validates required properties.

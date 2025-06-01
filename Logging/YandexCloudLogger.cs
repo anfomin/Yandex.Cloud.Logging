@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
+using Type = System.Type;
 
 namespace Yandex.Cloud.Logging;
 
@@ -29,6 +30,21 @@ public sealed class YandexCloudLogger(
 		if (!IsEnabled(logLevel))
 			return;
 
+		if (exception == null)
+			LogInternal(logLevel, state, null, formatter);
+		else
+		{
+			var options = _service.Options;
+			foreach (var ex in StripWrapperExceptions(exception, options.WrapperExceptions))
+			{
+				if (!options.IgnoreCanceledExceptions || (ex is not OperationCanceledException && ex.GetBaseException() is not OperationCanceledException))
+					LogInternal(logLevel, state, ex, formatter);
+			}
+		}
+	}
+
+	void LogInternal<TState>(LogLevel logLevel, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+	{
 		V1.IncomingLogEntry entry = new()
 		{
 			Timestamp = DateTime.UtcNow.ToTimestamp(),
@@ -76,5 +92,31 @@ public sealed class YandexCloudLogger(
 			ex = ex.InnerException;
 		}
 		payload.Fields["exceptions"] = Value.ForList(exValues.ToArray());
+	}
+
+	/// <summary>
+	/// Returns inner exceptions if <paramref name="exception"/> is any of <paramref name="wrapperExceptionTypes"/>.
+	/// </summary>
+	/// <param name="wrapperExceptionTypes">Exception types to strip.</param>
+	static IEnumerable<Exception> StripWrapperExceptions(Exception exception, IEnumerable<Type> wrapperExceptionTypes)
+	{
+		if (exception.InnerException != null && wrapperExceptionTypes.Contains(exception.GetType()))
+		{
+			if (exception is AggregateException ae)
+			{
+				foreach (var inner in ae.InnerExceptions)
+				foreach (var ex in StripWrapperExceptions(inner, wrapperExceptionTypes))
+					yield return ex;
+			}
+			else
+			{
+				foreach (var ex in StripWrapperExceptions(exception.InnerException, wrapperExceptionTypes))
+					yield return ex;
+			}
+		}
+		else
+		{
+			yield return exception;
+		}
 	}
 }

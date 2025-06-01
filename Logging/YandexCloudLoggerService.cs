@@ -23,6 +23,11 @@ public class YandexCloudLoggerService : BackgroundService
 	readonly SemaphoreSlim _queueSignal = new(0, 1);
 
 	/// <summary>
+	/// Gets current Yandex.Cloud logger options.
+	/// </summary>
+	public YandexCloudLoggerOptions Options => _options;
+
+	/// <summary>
 	/// Initializes a new instance of <see cref="YandexCloudLoggerService"/> used to send log entries to the Yandex.Cloud in background.
 	/// </summary>
 	/// <param name="options">Yandex.Cloud logger options.</param>
