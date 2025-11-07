@@ -52,7 +52,6 @@ public class YandexCloudLoggerService : BackgroundService
 		: _sdkDefault
 		?? throw new InvalidOperationException("Yandex.Cloud credentials provider must be set or SDK service registered.");
 
-	/// <inheritdoc />
 	public override void Dispose()
 	{
 		_optionsChangeToken?.Dispose();
@@ -73,7 +72,6 @@ public class YandexCloudLoggerService : BackgroundService
 		catch (SemaphoreFullException) { }
 	}
 
-	/// <inheritdoc />
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
 		var sent = DateTime.MinValue;

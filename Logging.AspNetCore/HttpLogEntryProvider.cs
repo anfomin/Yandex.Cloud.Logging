@@ -35,16 +35,16 @@ public class HttpLogEntryProvider(IHttpContextAccessor httpContextAccessor, IOpt
 			requestStruct.Fields["headers"] = Value.ForStruct(GetValuesStruct(request.Headers));
 		if (_options.Cookies)
 			requestStruct.Fields["cookies"] = Value.ForStruct(GetValuesStruct(request.Cookies));
-		if (_options.Form && GetFormStruct(request) is {} formStruct)
-			requestStruct.Fields["form"] = Value.ForStruct(formStruct);
-		if (context.Features.Get<NavigationManagerFeature>()?.NavigationManager is {} navigation)
+		if (_options.Form && GetFormStruct(request) is { } form)
+			requestStruct.Fields["form"] = Value.ForStruct(form);
+		if (context.Features.Get<NavigationManagerFeature>()?.NavigationManager is { } navigation)
 		{
 			requestStruct.Fields["url"] = Value.ForString(navigation.Uri);
 			requestStruct.Fields["circuit"] = Value.ForBool(true);
 		}
 		payload.Fields["request"] = Value.ForStruct(requestStruct);
 
-		if (context.User.Identity?.IsAuthenticated == true)
+		if (context.User.Identity is { IsAuthenticated: true })
 			payload.Fields["user"] = Value.ForString(context.User.Identity.Name);
 	}
 

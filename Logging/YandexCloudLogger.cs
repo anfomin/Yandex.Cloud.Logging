@@ -10,40 +10,38 @@ namespace Yandex.Cloud.Logging;
 public sealed class YandexCloudLogger(
 	string categoryName,
 	YandexCloudLoggerService service,
-	IEnumerable<IYandexCloudLogEntryProvider> entryProviders) : ILogger
+	IEnumerable<IYandexCloudLogEntryProvider> entryProviders
+) : ILogger
 {
 	readonly string _categoryName = categoryName;
 	readonly YandexCloudLoggerService _service = service;
 	readonly IEnumerable<IYandexCloudLogEntryProvider> _entryProviders = entryProviders;
 
-	/// <inheritdoc />
 	public IDisposable? BeginScope<TState>(TState state) where TState : notnull
 		=> null;
 
-	/// <inheritdoc />
 	public bool IsEnabled(LogLevel logLevel)
 		=> logLevel != LogLevel.None;
 
-	/// <inheritdoc />
 	public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
 	{
 		if (!IsEnabled(logLevel))
 			return;
 
 		if (exception == null)
-			LogInternal(logLevel, state, null, formatter);
+			LogInternal(logLevel, eventId, state, null, formatter);
 		else
 		{
 			var options = _service.Options;
 			foreach (var ex in StripWrapperExceptions(exception, options.WrapperExceptions))
 			{
 				if (!options.IgnoreCanceledExceptions || (ex is not OperationCanceledException && ex.GetBaseException() is not OperationCanceledException))
-					LogInternal(logLevel, state, ex, formatter);
+					LogInternal(logLevel, eventId, state, ex, formatter);
 			}
 		}
 	}
 
-	void LogInternal<TState>(LogLevel logLevel, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+	void LogInternal<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
 	{
 		V1.IncomingLogEntry entry = new()
 		{
@@ -58,6 +56,11 @@ public sealed class YandexCloudLogger(
 			payload ??= new();
 			provider.ApplyPayload(payload);
 		}
+		if (eventId != 0)
+		{
+			payload ??= new();
+			ApplyPayloadEventId(payload, eventId);
+		}
 		if (exception != null)
 		{
 			payload ??= new();
@@ -66,6 +69,17 @@ public sealed class YandexCloudLogger(
 		if (payload?.Fields.Count > 0)
 			entry.JsonPayload = payload;
 		_service.EnqueueLog(entry);
+	}
+
+	static void ApplyPayloadEventId(Struct payload, EventId eventId)
+	{
+		Struct evt = new()
+		{
+			Fields = { ["id"] = Value.ForNumber(eventId.Id) }
+		};
+		if (eventId.Name is { } name)
+			evt.Fields["name"] = Value.ForString(name);
+		payload.Fields["event"] = Value.ForStruct(evt);
 	}
 
 	static void ApplyPayloadException(Struct payload, Exception exception)
@@ -82,7 +96,7 @@ public sealed class YandexCloudLogger(
 					["message"] = Value.ForString(ex.Message)
 				}
 			};
-			if (ex.StackTrace is {} stackTrace)
+			if (ex.StackTrace is { } stackTrace)
 				exPayload.Fields["stack_trace"] = Value.ForList(stackTrace
 					.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
 					.Select(Value.ForString)

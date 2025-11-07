@@ -13,11 +13,9 @@ public sealed class YandexCloudLoggerProvider(YandexCloudLoggerService service, 
 	readonly IEnumerable<IYandexCloudLogEntryProvider> _entryProviders = entryProviders;
 	readonly ConcurrentDictionary<string, YandexCloudLogger> _loggers = new(StringComparer.OrdinalIgnoreCase);
 
-	/// <inheritdoc />
 	public ILogger CreateLogger(string categoryName)
 		=> _loggers.GetOrAdd(categoryName, key => new YandexCloudLogger(key, _service, _entryProviders));
 
-	/// <inheritdoc />
 	public void Dispose()
 		=> _loggers.Clear();
 }
