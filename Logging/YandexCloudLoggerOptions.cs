@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using Yandex.Cloud.Credentials;
 
 namespace Yandex.Cloud.Logging;
@@ -61,6 +62,12 @@ public record YandexCloudLoggerOptions
 	/// exception as the InnerException.
 	/// </summary>
 	public HashSet<Type> WrapperExceptions { get; set; } = [typeof(TargetInvocationException)];
+
+	/// <summary>
+	/// Gets or sets <see cref="JsonSerializerOptions"/> used to serialize log details.
+	/// If <c>null</c> then <see cref="System.Text.Json.JsonSerializerOptions.Web"/> will be used.
+	/// </summary>
+	public JsonSerializerOptions? JsonSerializerOptions { get; set; }
 
 	/// <summary>
 	/// Validates required properties.

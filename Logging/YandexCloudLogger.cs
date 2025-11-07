@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
+using Yandex.Cloud.Logging.V1;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Type = System.Type;
 
 namespace Yandex.Cloud.Logging;
@@ -43,7 +46,7 @@ public sealed class YandexCloudLogger(
 
 	void LogInternal<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
 	{
-		V1.IncomingLogEntry entry = new()
+		IncomingLogEntry entry = new()
 		{
 			Timestamp = DateTime.UtcNow.ToTimestamp(),
 			Level = logLevel.ToYandex(),
@@ -65,6 +68,11 @@ public sealed class YandexCloudLogger(
 		{
 			payload ??= new();
 			ApplyPayloadException(payload, exception);
+		}
+		if (state is LogState { Details: { } details })
+		{
+			payload ??= new();
+			ApplyPayloadDetails(payload, details);
 		}
 		if (payload?.Fields.Count > 0)
 			entry.JsonPayload = payload;
@@ -106,6 +114,24 @@ public sealed class YandexCloudLogger(
 			ex = ex.InnerException;
 		}
 		payload.Fields["exceptions"] = Value.ForList(exValues.ToArray());
+	}
+
+	void ApplyPayloadDetails(Struct payload, object details)
+	{
+#if NET8_0
+		var options = _service.Options.JsonSerializerOptions ?? JsonSerializerOptions.Default;
+#else
+		var options = _service.Options.JsonSerializerOptions ?? JsonSerializerOptions.Web;
+#endif
+		try
+		{
+			string json = JsonSerializer.Serialize(details, options);
+			payload.Fields["details"] = Value.Parser.ParseJson(json);
+		}
+		catch (Exception ex)
+		{
+			payload.Fields["detailsException"] = Value.ForString(ex.Message);
+		}
 	}
 
 	/// <summary>

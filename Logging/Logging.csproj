@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="JetBrains.Annotations" Version="2025.*" />
 		<PackageReference Include="Yandex.Cloud.SDK" Version="1.4.*"/>
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
