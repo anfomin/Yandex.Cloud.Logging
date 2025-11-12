@@ -3,7 +3,10 @@ using static Yandex.Cloud.Logging.V1.LogLevel.Types;
 
 namespace Yandex.Cloud.Logging;
 
-public static class LogLevelExtensions
+/// <summary>
+/// Provides extensions Yandex.Cloud logging.
+/// </summary>
+public static class Extensions
 {
 	/// <summary>
 	/// Converts <see cref="LogLevel"/> to <see cref="V1.LogLevel"/>.

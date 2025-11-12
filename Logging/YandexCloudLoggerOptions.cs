@@ -63,10 +63,17 @@ public record YandexCloudLoggerOptions
 	/// </summary>
 	public HashSet<Type> WrapperExceptions { get; set; } = [typeof(TargetInvocationException)];
 
+#if NET9_0_OR_GREATER
 	/// <summary>
 	/// Gets or sets <see cref="JsonSerializerOptions"/> used to serialize log details.
 	/// If <c>null</c> then <see cref="System.Text.Json.JsonSerializerOptions.Web"/> will be used.
 	/// </summary>
+#else
+	/// <summary>
+	/// Gets or sets <see cref="JsonSerializerOptions"/> used to serialize log details.
+	/// If <c>null</c> then <see cref="System.Text.Json.JsonSerializerOptions.Default"/> will be used.
+	/// </summary>
+#endif
 	public JsonSerializerOptions? JsonSerializerOptions { get; set; }
 
 	/// <summary>

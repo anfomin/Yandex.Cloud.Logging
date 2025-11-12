@@ -118,10 +118,10 @@ public sealed class YandexCloudLogger(
 
 	void ApplyPayloadDetails(Struct payload, object details)
 	{
-#if NET8_0
-		var options = _service.Options.JsonSerializerOptions ?? JsonSerializerOptions.Default;
-#else
+#if NET9_0_OR_GREATER
 		var options = _service.Options.JsonSerializerOptions ?? JsonSerializerOptions.Web;
+#else
+		var options = _service.Options.JsonSerializerOptions ?? JsonSerializerOptions.Default;
 #endif
 		try
 		{
