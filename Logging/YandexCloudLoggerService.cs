@@ -1,4 +1,3 @@
-
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +11,7 @@ namespace Yandex.Cloud.Logging;
 /// </summary>
 public class YandexCloudLoggerService : BackgroundService
 {
-	const int RetryCount = 10;
+	const int MaxAttempts = 10;
 	static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(10);
 
 	YandexCloudLoggerOptions _options;
@@ -109,10 +108,10 @@ public class YandexCloudLoggerService : BackgroundService
 
 	async Task SendLogsAsync(List<IncomingLogEntry> entries, CancellationToken cancellationToken = default)
 	{
-		int retry = 0;
+		int attempts = 0;
 		while (true)
 		{
-			retry++;
+			attempts++;
 			try
 			{
 				WriteRequest request = new()
@@ -132,7 +131,7 @@ public class YandexCloudLoggerService : BackgroundService
 				await _sdk.Services.Logging.LogIngestionService.WriteAsync(request, cancellationToken: cancellationToken);
 				return;
 			}
-			catch (Exception ex) when (ex is not OperationCanceledException && retry <= RetryCount)
+			catch (Exception ex) when (ex is not OperationCanceledException && attempts < MaxAttempts)
 			{
 				await Task.Delay(RetryDelay, cancellationToken);
 			}

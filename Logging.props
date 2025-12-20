@@ -4,7 +4,7 @@
 		<RepositoryUrl>https://github.com/anfomin/yandex.cloud.logging</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<VersionPrefix>1.5.1</VersionPrefix>
+		<VersionPrefix>1.5.2</VersionPrefix>
 		<VersionSuffix Condition="'$(VERSION_SUFFIX)'!=''">$(VERSION_SUFFIX)</VersionSuffix>
 		<RootNamespace>Yandex.Cloud.Logging</RootNamespace>
 		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
@@ -13,6 +13,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DebugType>embedded</DebugType>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DefineConstants>$(DefineConstants);JETBRAINS_ANNOTATIONS</DefineConstants>
 		<NoWarn>$(NoWarn);CS1573;CS1591</NoWarn>
 	</PropertyGroup>
 
