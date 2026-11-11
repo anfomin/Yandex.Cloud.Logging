@@ -7,7 +7,8 @@ namespace Yandex.Cloud.Logging;
 /// Provides loggers for Yandex.Cloud.
 /// </summary>
 [ProviderAlias("YandexCloud")]
-public sealed class YandexCloudLoggerProvider(YandexCloudLoggerService service, IEnumerable<IYandexCloudLogEntryProvider> entryProviders) : ILoggerProvider
+public sealed class YandexCloudLoggerProvider(YandexCloudLoggerService service, IEnumerable<IYandexCloudLogEntryProvider> entryProviders)
+	: ILoggerProvider
 {
 	readonly YandexCloudLoggerService _service = service;
 	readonly IEnumerable<IYandexCloudLogEntryProvider> _entryProviders = entryProviders;

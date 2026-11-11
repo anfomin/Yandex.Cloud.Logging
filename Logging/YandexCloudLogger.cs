@@ -13,8 +13,8 @@ namespace Yandex.Cloud.Logging;
 public sealed class YandexCloudLogger(
 	string categoryName,
 	YandexCloudLoggerService service,
-	IEnumerable<IYandexCloudLogEntryProvider> entryProviders
-) : ILogger
+	IEnumerable<IYandexCloudLogEntryProvider> entryProviders)
+	: ILogger
 {
 	readonly string _categoryName = categoryName;
 	readonly YandexCloudLoggerService _service = service;

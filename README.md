@@ -2,7 +2,7 @@
 
 [Yandex.Cloud Logging](https://yandex.cloud/services/logging) provider implementation for Microsoft.Extensions.Logging. Library features:
 
-- Supports .NET 8, .NET 9 and .NET 10.
+- Supports .NET 8, .NET 9, .NET 10 and .NET 11.
 - Supports Blazor.
 - Can log HTTP request URL, method IP and username.
 - Logs are queued and delivered via background service.
